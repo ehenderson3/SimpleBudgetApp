@@ -1,17 +1,15 @@
-//
-//  SimpleBudgetAppApp.swift
-//  SimpleBudgetApp
-//
-//  Created by Enrique Henderson on 12/13/24.
-//
+// SimpleBudgetAppApp.swift
 
 import SwiftUI
 
 @main
 struct SimpleBudgetAppApp: App {
+    @StateObject private var budgetData = BudgetData()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(budgetData)
         }
     }
 }
