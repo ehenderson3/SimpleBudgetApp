@@ -6,6 +6,9 @@ struct EmergencyFundView: View {
     @EnvironmentObject var budgetData: BudgetData
     @State private var emergencyFundGoal: String = ""
     @State private var emergencyFundBalance: String = ""
+    @State private var payPeriodAmount: String = ""
+    @State private var multiplier: String = "3" // Default multiplier
+    @State private var isPayPeriodEnabled: Bool = false // Checkbox state
     @State private var showingAlert: Bool = false
     @State private var alertMessage: String = ""
 
@@ -36,6 +39,16 @@ struct EmergencyFundView: View {
             }
             .padding(.horizontal)
 
+            // Total Non-Discretionary Expenses
+            HStack {
+                Text("Total Non-Discretionary Expenses:")
+                    .font(.headline)
+                Spacer()
+                Text(String(format: "$%.2f", totalNonDiscretionaryExpenses))
+                    .font(.headline)
+            }
+            .padding(.horizontal)
+
             // Add to Emergency Fund
             VStack(alignment: .leading, spacing: 10) {
                 Text("Add to Emergency Fund")
@@ -44,23 +57,7 @@ struct EmergencyFundView: View {
                 TextField("Amount to Add", text: $emergencyFundBalance)
                     .keyboardType(.decimalPad)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Progress")
-                        .font(.headline)
-                    
-                    ProgressView(value: budgetData.emergencyFundBalance, total: budgetData.emergencyFundGoal)
-                        .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                        .accentColor(.blue)
-                    
-                    Text(String(format: "%.0f%% of Goal", (budgetData.emergencyFundBalance / budgetData.emergencyFundGoal) * 100))
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
-                .padding(.horizontal);
-                
+
                 Button(action: {
                     addToEmergencyFund()
                 }) {
@@ -77,17 +74,67 @@ struct EmergencyFundView: View {
             .cornerRadius(12)
             .padding(.horizontal)
 
-            // Set/Update Goal
+            // Set Per Pay Period Contribution
             VStack(alignment: .leading, spacing: 10) {
-                Text("Set/Update Goal")
+                HStack {
+                    Toggle(isOn: $isPayPeriodEnabled) {
+                        Text("Enable Per Pay Period Contribution")
+                            .font(.headline)
+                    }
+                }
+
+                if isPayPeriodEnabled {
+                    TextField("Set Per Pay Period Amount", text: $payPeriodAmount)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    Button(action: {
+                        setPayPeriodAmount()
+                    }) {
+                        Text("Set Contribution")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                }
+
+                if let currentPayPeriodAmount = getPayPeriodAmount() {
+                    HStack {
+                        Text("Amount: \(currentPayPeriodAmount)")
+                            .font(.body)
+                            .foregroundColor(.primary)
+                            .onTapGesture {
+                                addPayPeriodAmount()
+                            }
+                        Spacer()
+                        Text("Tap to add")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(12)
+            .padding(.horizontal)
+
+            // Set Goal Based on Multiplier
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Set Goal Based on Non-Discretionary Amount")
                     .font(.headline)
 
-                TextField("Goal Amount", text: $emergencyFundGoal)
-                    .keyboardType(.decimalPad)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                HStack {
+                    TextField("Multiplier", text: $multiplier)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Text("× \(String(format: "$%.2f", totalNonDiscretionaryExpenses))")
+                        .foregroundColor(.primary)
+                }
 
                 Button(action: {
-                    setEmergencyFundGoal()
+                    setGoalBasedOnMultiplier()
                 }) {
                     Text("Set Goal")
                         .foregroundColor(.white)
@@ -109,11 +156,24 @@ struct EmergencyFundView: View {
             // Initialize state with current data
             emergencyFundGoal = String(format: "%.2f", budgetData.emergencyFundGoal)
             emergencyFundBalance = ""
+            isPayPeriodEnabled = UserDefaults.standard.bool(forKey: "isPayPeriodEnabled")
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
         }
     }
+
+    // MARK: - Computed Properties
+
+    var totalNonDiscretionaryExpenses: Double {
+        budgetData.expenses
+            .filter { expense in
+                budgetData.categories.first(where: { $0.id == expense.categoryID })?.name.lowercased() == "non-discretionary"
+            }
+            .reduce(0) { $0 + $1.amount }
+    }
+
+    // MARK: - Functions
 
     func addToEmergencyFund() {
         guard let amount = Double(emergencyFundBalance), amount > 0 else {
@@ -126,21 +186,47 @@ struct EmergencyFundView: View {
         emergencyFundBalance = ""
     }
 
-    func setEmergencyFundGoal() {
-        guard let goal = Double(emergencyFundGoal), goal > 0 else {
-            alertMessage = "Please enter a valid goal amount."
+    func setPayPeriodAmount() {
+        guard let amount = Double(payPeriodAmount), amount > 0 else {
+            alertMessage = "Please enter a valid per-pay-period amount."
             showingAlert = true
             return
         }
 
-        budgetData.emergencyFundGoal = goal
-        emergencyFundGoal = String(format: "%.2f", goal)
+        UserDefaults.standard.set(amount, forKey: "PayPeriodAmount")
+        payPeriodAmount = "" // Clear the input field
     }
-}
 
-struct EmergencyFundView_Previews: PreviewProvider {
-    static var previews: some View {
-        EmergencyFundView()
-            .environmentObject(BudgetData())
+    func addPayPeriodAmount() {
+        guard let amount = getPayPeriodAmountAsDouble(), amount > 0 else {
+            alertMessage = "Invalid per-pay-period amount."
+            showingAlert = true
+            return
+        }
+
+        budgetData.emergencyFundBalance += amount
+    }
+
+    func setGoalBasedOnMultiplier() {
+        guard let multiplierValue = Double(multiplier), multiplierValue > 0 else {
+            alertMessage = "Please enter a valid multiplier."
+            showingAlert = true
+            return
+        }
+
+        let calculatedGoal = totalNonDiscretionaryExpenses * multiplierValue
+        budgetData.emergencyFundGoal = calculatedGoal
+        emergencyFundGoal = String(format: "%.2f", calculatedGoal)
+    }
+
+    func getPayPeriodAmount() -> String? {
+        guard let amount = UserDefaults.standard.value(forKey: "PayPeriodAmount") as? Double else {
+            return nil
+        }
+        return String(format: "$%.2f", amount)
+    }
+
+    func getPayPeriodAmountAsDouble() -> Double? {
+        return UserDefaults.standard.value(forKey: "PayPeriodAmount") as? Double
     }
 }

@@ -34,6 +34,7 @@
 		80F55DD12D0D76620008DAB5 /* CategoryExpenseBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F55DD02D0D76620008DAB5 /* CategoryExpenseBreakdownView.swift */; };
 		80F55DD32D0D776A0008DAB5 /* RecommendedRatiosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F55DD22D0D776A0008DAB5 /* RecommendedRatiosView.swift */; };
 		80F55DD52D0E52F50008DAB5 /* EmergencyFundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F55DD42D0E52F50008DAB5 /* EmergencyFundView.swift */; };
+		80FC40492D1B4FCC00994D29 /* EditDebtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC40482D1B4F8300994D29 /* EditDebtView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
 		80F55DD02D0D76620008DAB5 /* CategoryExpenseBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryExpenseBreakdownView.swift; sourceTree = "<group>"; };
 		80F55DD22D0D776A0008DAB5 /* RecommendedRatiosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedRatiosView.swift; sourceTree = "<group>"; };
 		80F55DD42D0E52F50008DAB5 /* EmergencyFundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyFundView.swift; sourceTree = "<group>"; };
+		80FC40482D1B4F8300994D29 /* EditDebtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDebtView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 		80F55DCF2D0D678E0008DAB5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				80FC40482D1B4F8300994D29 /* EditDebtView.swift */,
 				80A577352D18F20D00E78359 /* AddSavingsBucketView.swift */,
 				80A577332D18F1D200E78359 /* SavingsBucketView.swift */,
 				80A5772F2D18EB4A00E78359 /* AddDebtView.swift */,
@@ -251,6 +254,7 @@
 				80A577302D18EB5400E78359 /* AddDebtView.swift in Sources */,
 				80F55DC32D0D643C0008DAB5 /* Expense.swift in Sources */,
 				80F55DCB2D0D65E70008DAB5 /* EditCategoryView.swift in Sources */,
+				80FC40492D1B4FCC00994D29 /* EditDebtView.swift in Sources */,
 				80C1F2D32D0D33E9001FFBA3 /* SimpleBudgetAppApp.swift in Sources */,
 				80F55DC12D0D61C00008DAB5 /* Category.swift in Sources */,
 				80F55DC52D0D65110008DAB5 /* BudgetEnums.swift in Sources */,

@@ -8,6 +8,10 @@ class BudgetData: ObservableObject {
     @Published var grossIncome: Double = 0.0
     @Published var categories: [Category] = []
     @Published var expenses: [Expense] = []
+    @Published var savingsBuckets: [SavingsBucket] = [] // Assuming this is the source of truth
+    @Published var extraDeduction: Double = 0.0 // Track extra deductions (e.g., snowball payments)
+
+
 
     // Emergency Fund Properties
     @Published var emergencyFundGoal: Double = 1000.0 {
@@ -38,14 +42,21 @@ class BudgetData: ObservableObject {
     }
 
     var remainingIncome: Double {
-        grossIncome - totalExpenses
+        grossIncome - totalExpenses - extraDeduction
     }
 
 
 
     // MARK: - Data Persistence Methods
 
+
     /// Saves the current state of gross income, categories, and expenses to UserDefaults
+    ///
+    ///
+    ///
+    func deductFromRemainingIncome(_ amount: Double) {
+    extraDeduction += amount
+    }
     func saveData() {
         let encoder = JSONEncoder()
         do {
@@ -127,6 +138,7 @@ class BudgetData: ObservableObject {
     /// - Parameter expense: The expense to be added
     func addExpense(_ expense: Expense) {
         expenses.append(expense)
+        print("Added expense: \(expense), total now: \(expenses.count)")
         saveData()
     }
 
@@ -135,5 +147,11 @@ class BudgetData: ObservableObject {
     func removeExpenses(at offsets: IndexSet) {
         expenses.remove(atOffsets: offsets)
         saveData()
+    }
+    
+    func updateSavingsBucket(_ bucket: SavingsBucket) {
+        if let index = savingsBuckets.firstIndex(where: { $0.id == bucket.id }) {
+            savingsBuckets[index] = bucket
+        }
     }
 }

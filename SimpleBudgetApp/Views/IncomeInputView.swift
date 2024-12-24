@@ -32,7 +32,14 @@ struct IncomeInputView: View {
                 EmptyView()
             }
 
-            Button(action: saveIncomeAndNavigate) {
+            Button(action: {
+                if isValidIncome() {
+                    saveIncomeAndNavigate()
+                } else {
+                    alertMessage = "Please enter a valid income."
+                    showingAlert = true
+                }
+            }) {
                 Text("Next")
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -41,6 +48,11 @@ struct IncomeInputView: View {
                     .cornerRadius(8)
             }
             .disabled(!isValidIncome())
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("Invalid Input"),
+                      message: Text(alertMessage),
+                      dismissButton: .default(Text("OK")))
+            }
 
             Spacer()
         }
@@ -48,12 +60,9 @@ struct IncomeInputView: View {
         .onAppear {
             loadCurrentIncome()
         }
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Invalid Input"),
-                  message: Text(alertMessage),
-                  dismissButton: .default(Text("OK")))
-        }
     }
+
+    // MARK: - Helper Functions
 
     func isValidIncome() -> Bool {
         guard let income = Double(incomeInput), income > 0 else {
@@ -84,3 +93,4 @@ struct IncomeInputView: View {
         return budgetData.grossIncome > 0 ? String(format: "$%.2f", budgetData.grossIncome) : nil
     }
 }
+

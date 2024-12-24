@@ -28,7 +28,7 @@ struct DashboardView: View {
                     IncomeInputView()
                 case .expenseInput(let type):
                     ExpenseInputView(expenseType: type) // Pass the expense type to ExpenseInputView
-                        .environmentObject(BudgetData())
+                        //.environmentObject(BudgetData())
                 case .summary:
                     SummaryView()
                 case .report:

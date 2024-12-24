@@ -9,10 +9,14 @@ struct ExpenseInputView: View {
     @State private var expenseAmountString: String = ""
     @State private var selectedCategoryID: UUID? // Selected category ID
     @State private var showingCategoryManagement = false
-
+    
     var body: some View {
         VStack {
             HStack {
+                Text("Remaining Income: \(String(format: "$%.2f", budgetData.remainingIncome))")
+                    .font(.subheadline)
+                    .foregroundColor(budgetData.remainingIncome >= 0 ? .green : .red)
+                    .padding(.bottom)
                 Text(expenseType == .nonDiscretionary ? "Non-Discretionary Expenses" : "Discretionary Expenses")
                     .font(.headline)
                 Spacer()
@@ -92,17 +96,14 @@ struct ExpenseInputView: View {
             .padding([.horizontal, .bottom])
 
             // NavigationLink to proceed to the next step
-            NavigationLink(
-                value: nextDestination(),
-                label: {
-                    Text(doneButtonTitle())
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(canProceed() ? Color.blue : Color.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-            )
+            NavigationLink(destination: nextDestinationView()) {
+                Text(doneButtonTitle())
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(canProceed() ? Color.blue : Color.gray)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
             .disabled(!canProceed())
             .padding([.horizontal, .bottom])
         }
@@ -131,14 +132,11 @@ struct ExpenseInputView: View {
     }
 
     var currentExpenses: [Expense] {
-        // Filter expenses based on the initial expenseType
-        // This assumes that initial categories are "Non-Discretionary" and "Discretionary"
-        // Adjust as needed if you have more categories
         switch expenseType {
         case .nonDiscretionary:
-            return budgetData.expenses.filter { category(of: $0) == "Non-Discretionary" }
+            return budgetData.expenses.filter { category(of: $0).lowercased() == "non-discretionary" }
         case .discretionary:
-            return budgetData.expenses.filter { category(of: $0) == "Discretionary" }
+            return budgetData.expenses.filter { category(of: $0).lowercased() == "discretionary" }
         }
     }
 
@@ -185,13 +183,14 @@ struct ExpenseInputView: View {
         expenseType == .nonDiscretionary ? "Done Non-Discretionary" : "Done Discretionary"
     }
 
-    func nextDestination() -> BudgetDestination {
+    func nextDestinationView() -> some View {
         if expenseType == .nonDiscretionary {
-            return .expenseInput(.discretionary)
+            return AnyView(ExpenseInputView(expenseType: .discretionary))
         } else {
-            return .summary
+            return AnyView(SummaryView())
         }
     }
+
 }
 
 struct ExpenseInputView_Previews: PreviewProvider {
