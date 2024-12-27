@@ -35,6 +35,7 @@
 		80F55DD32D0D776A0008DAB5 /* RecommendedRatiosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F55DD22D0D776A0008DAB5 /* RecommendedRatiosView.swift */; };
 		80F55DD52D0E52F50008DAB5 /* EmergencyFundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F55DD42D0E52F50008DAB5 /* EmergencyFundView.swift */; };
 		80FC40492D1B4FCC00994D29 /* EditDebtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC40482D1B4F8300994D29 /* EditDebtView.swift */; };
+		80FC40AB2D1C92DA00994D29 /* SnowballPlanChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC40AA2D1C92CB00994D29 /* SnowballPlanChartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,7 +67,9 @@
 		80F55DD02D0D76620008DAB5 /* CategoryExpenseBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryExpenseBreakdownView.swift; sourceTree = "<group>"; };
 		80F55DD22D0D776A0008DAB5 /* RecommendedRatiosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedRatiosView.swift; sourceTree = "<group>"; };
 		80F55DD42D0E52F50008DAB5 /* EmergencyFundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyFundView.swift; sourceTree = "<group>"; };
+		80F8F4B72D1F5B4800441239 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		80FC40482D1B4F8300994D29 /* EditDebtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDebtView.swift; sourceTree = "<group>"; };
+		80FC40AA2D1C92CB00994D29 /* SnowballPlanChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowballPlanChartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +109,7 @@
 				80F55DCF2D0D678E0008DAB5 /* Views */,
 				80C1F2D62D0D33ED001FFBA3 /* Assets.xcassets */,
 				80C1F2D82D0D33ED001FFBA3 /* Preview Content */,
+				80F8F4B72D1F5B4800441239 /* Info.plist */,
 			);
 			path = SimpleBudgetApp;
 			sourceTree = "<group>";
@@ -142,6 +146,7 @@
 		80F55DCF2D0D678E0008DAB5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				80FC40AA2D1C92CB00994D29 /* SnowballPlanChartView.swift */,
 				80FC40482D1B4F8300994D29 /* EditDebtView.swift */,
 				80A577352D18F20D00E78359 /* AddSavingsBucketView.swift */,
 				80A577332D18F1D200E78359 /* SavingsBucketView.swift */,
@@ -198,7 +203,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 80C1F2CA2D0D33E9001FFBA3 /* Build configuration list for PBXProject "SimpleBudgetApp" */;
+			buildConfigurationList = 80C1F2CA2D0D33E9001FFBA3 /* Build configuration list for PBXProject "EasyBudgetAppForTheFutureRich" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -250,6 +255,7 @@
 				80A5772A2D18E79200E78359 /* Debt.swift in Sources */,
 				80A577342D18F1DD00E78359 /* SavingsBucketView.swift in Sources */,
 				80B651A22D11096600ADE42E /* DashboardView.swift in Sources */,
+				80FC40AB2D1C92DA00994D29 /* SnowballPlanChartView.swift in Sources */,
 				80A5772E2D18E81500E78359 /* SnowballView.swift in Sources */,
 				80A577302D18EB5400E78359 /* AddDebtView.swift in Sources */,
 				80F55DC32D0D643C0008DAB5 /* Expense.swift in Sources */,
@@ -392,8 +398,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleBudgetApp/Preview Content\"";
+				DEVELOPMENT_TEAM = 5RA772BK35;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/SimpleBudgetApp/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = EasyBudgetAppForTheFutureRich;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -404,7 +414,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.qaalignllc.www.SimpleBudgetApp;
+				NEW_SETTING = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qaalignllc.www.EasyBudgetAppForTheFutureRich;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -420,8 +431,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleBudgetApp/Preview Content\"";
+				DEVELOPMENT_TEAM = 5RA772BK35;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/SimpleBudgetApp/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = EasyBudgetAppForTheFutureRich;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,7 +447,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.qaalignllc.www.SimpleBudgetApp;
+				NEW_SETTING = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qaalignllc.www.EasyBudgetAppForTheFutureRich;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -443,7 +459,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		80C1F2CA2D0D33E9001FFBA3 /* Build configuration list for PBXProject "SimpleBudgetApp" */ = {
+		80C1F2CA2D0D33E9001FFBA3 /* Build configuration list for PBXProject "EasyBudgetAppForTheFutureRich" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				80C1F2DB2D0D33ED001FFBA3 /* Debug */,

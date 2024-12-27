@@ -18,7 +18,7 @@
                BlueprintIdentifier = "80C1F2CE2D0D33E9001FFBA3"
                BuildableName = "SimpleBudgetApp.app"
                BlueprintName = "SimpleBudgetApp"
-               ReferencedContainer = "container:SimpleBudgetApp.xcodeproj">
+               ReferencedContainer = "container:EasyBudgetAppForTheFutureRich.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "80C1F2CE2D0D33E9001FFBA3"
             BuildableName = "SimpleBudgetApp.app"
             BlueprintName = "SimpleBudgetApp"
-            ReferencedContainer = "container:SimpleBudgetApp.xcodeproj">
+            ReferencedContainer = "container:EasyBudgetAppForTheFutureRich.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -71,7 +71,7 @@
             BlueprintIdentifier = "80C1F2CE2D0D33E9001FFBA3"
             BuildableName = "SimpleBudgetApp.app"
             BlueprintName = "SimpleBudgetApp"
-            ReferencedContainer = "container:SimpleBudgetApp.xcodeproj">
+            ReferencedContainer = "container:EasyBudgetAppForTheFutureRich.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

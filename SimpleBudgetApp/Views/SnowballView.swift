@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 struct SnowballView: View {
     @EnvironmentObject var budgetData: BudgetData
@@ -6,6 +7,8 @@ struct SnowballView: View {
     @State private var extraPayment: String = ""
     @State private var snowballPlan: [DebtPlan] = []
     @State private var showingAddDebtModal: Bool = false
+    @State private var showingEditDebtModal: Bool = false
+    @State private var selectedDebtIndex: Int?
     @State private var alertMessage: String = ""
     @State private var showingAlert: Bool = false
 
@@ -14,6 +17,7 @@ struct SnowballView: View {
     var remainingAfterExtraPayment: Double {
         budgetData.remainingIncome - (Double(extraPayment) ?? 0)
     }
+    
 
     var body: some View {
         VStack(spacing: 20) {
@@ -24,7 +28,6 @@ struct SnowballView: View {
 
             Text(String(format: "Remaining Income: $%.2f", budgetData.remainingIncome))
                 .font(.headline)
-                .foregroundColor(.primary)
 
             TextField("Extra Payment (Optional)", text: $extraPayment)
                 .keyboardType(.decimalPad)
@@ -52,6 +55,19 @@ struct SnowballView: View {
                             }
                             Spacer()
                             Button(action: {
+                                if let index = debts.firstIndex(where: { $0.id == debt.id }) {
+                                    selectedDebtIndex = index
+                                    showingEditDebtModal = true
+                                }
+                            }) {
+                                Text("Edit")
+                                    .font(.subheadline)
+                                    .padding(8)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                            Button(action: {
                                 removeDebt(debt)
                             }) {
                                 Image(systemName: "trash")
@@ -75,7 +91,12 @@ struct SnowballView: View {
             .padding(.horizontal)
             .sheet(isPresented: $showingAddDebtModal) {
                 AddDebtView { newDebt in
-                    debts.append(newDebt)
+                    addDebt(newDebt)
+                }
+            }
+            .sheet(isPresented: $showingEditDebtModal) {
+                if let selectedDebtIndex = selectedDebtIndex {
+                    EditDebtView(debt: $debts[selectedDebtIndex])
                 }
             }
 
@@ -91,22 +112,16 @@ struct SnowballView: View {
             .padding(.horizontal)
 
             if !snowballPlan.isEmpty {
-                List {
-                    ForEach(snowballPlan, id: \.debt.id) { plan in
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(plan.debt.name).font(.headline)
-                            ProgressView(value: plan.totalPaid, total: plan.debt.balance)
-                                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                            Text(String(format: "Total Paid: $%.2f", plan.totalPaid))
-                            Text("Months to Pay Off: \(plan.monthsToPayOff)")
-                        }
-                    }
-                }
+                SnowballPlanChartView(plan: snowballPlan)
+                    .padding()
             }
 
             Spacer()
         }
         .padding()
+        .onAppear {
+            loadDebts()
+        }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Invalid Input"),
                   message: Text(alertMessage),
@@ -114,10 +129,20 @@ struct SnowballView: View {
         }
     }
 
+    func addDebt(_ newDebt: Debt) {
+        debts.append(newDebt)
+        budgetData.debts = debts
+    }
+
     func removeDebt(_ debt: Debt) {
         if let index = debts.firstIndex(where: { $0.id == debt.id }) {
             debts.remove(at: index)
+            budgetData.debts = debts
         }
+    }
+
+    func loadDebts() {
+        debts = budgetData.debts
     }
 
     func calculatePlan() {
@@ -127,15 +152,17 @@ struct SnowballView: View {
             return
         }
 
-        // Deduct extra payment from remaining income
         if remainingAfterExtraPayment < 0 {
             alertMessage = "Insufficient remaining income for this extra payment."
             showingAlert = true
             return
         }
 
-        // Deduct the extra payment from BudgetData
-        budgetData.deductFromRemainingIncome(extra)
+        // Deduct the extra payment by adding it as a new "Extra Payment" expense
+        let extraExpense = Expense(name: "Extra Payment", amount: extra, categoryID: UUID())
+        budgetData.addExpense(extraExpense)
+
+        extraPayment = "" // Clear the extra payment field
 
         // Calculate the snowball plan
         snowballPlan = calculator.calculate(debts: debts, extraPayment: extra)

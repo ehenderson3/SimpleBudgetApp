@@ -10,7 +10,7 @@ class BudgetData: ObservableObject {
     @Published var expenses: [Expense] = []
     @Published var savingsBuckets: [SavingsBucket] = [] // Assuming this is the source of truth
     @Published var extraDeduction: Double = 0.0 // Track extra deductions (e.g., snowball payments)
-
+    @Published var debts: [Debt] = [] // Add this line if not already present
 
 
     // Emergency Fund Properties
@@ -51,9 +51,7 @@ class BudgetData: ObservableObject {
 
 
     /// Saves the current state of gross income, categories, and expenses to UserDefaults
-    ///
-    ///
-    ///
+
     func deductFromRemainingIncome(_ amount: Double) {
     extraDeduction += amount
     }
@@ -154,4 +152,9 @@ class BudgetData: ObservableObject {
             savingsBuckets[index] = bucket
         }
     }
+    // Add a method to update debts to handle state changes if needed.
+    func updateDebts(_ newDebts: [Debt]) {
+        self.debts = newDebts
+    }
+    
 }
